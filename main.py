@@ -1,4 +1,5 @@
-from src.tools.tools import web_search
+from src.pipelines.pipeline import run_research_pipeline
 
-output = web_search("What is the capital of France?")
-print(output)
+
+topic = "The impact of AI on the job market in 2026"
+run_research_pipeline(topic)
