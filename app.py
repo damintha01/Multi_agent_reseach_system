@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import html
 from src.agents.agents import build_search_agent, build_reader_agent, writer_chain, critic_chain
 
 # ── Page config ──────────────────────────────────────────────────────────────
@@ -304,7 +305,7 @@ html, body, [class*="css"] {
 .result-panel,
 .report-panel,
 .feedback-panel {
-    background: rgba(255,255,255,0.66);
+    background: rgba(255,255,255,0.9);
     border-radius: 20px;
     border: 1px solid rgba(31,42,55,0.14);
     padding: 1.5rem;
@@ -329,6 +330,70 @@ html, body, [class*="css"] {
 
 .panel-label.green {
     color: var(--ok);
+}
+
+.report-panel {
+    color: #000000 !important;
+    background: rgba(255,255,255,0.96);
+    border-left: 4px solid rgba(11,132,165,0.7);
+}
+
+.report-body {
+    color: #000000 !important;
+    line-height: 1.72;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+}
+
+.feedback-panel {
+    color: #000000 !important;
+    background: rgba(255,255,255,0.96);
+    border-left: 4px solid rgba(31,157,85,0.7);
+}
+
+.feedback-body {
+    color: #000000 !important;
+    line-height: 1.72;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+}
+
+.feedback-panel h1,
+.feedback-panel h2,
+.feedback-panel h3,
+.feedback-panel h4,
+.feedback-panel h5,
+.feedback-panel h6,
+.feedback-panel p,
+.feedback-panel li,
+.feedback-panel span,
+.feedback-panel strong,
+.feedback-panel em,
+.feedback-panel code,
+.feedback-panel blockquote,
+.feedback-panel a {
+    color: #000000 !important;
+}
+
+.report-panel h1,
+.report-panel h2,
+.report-panel h3,
+.report-panel h4,
+.report-panel h5,
+.report-panel h6,
+.report-panel p,
+.report-panel li,
+.report-panel span,
+.report-panel strong,
+.report-panel em,
+.report-panel code,
+.report-panel blockquote,
+.report-panel a {
+    color: #000000 !important;
+}
+
+.report-panel a {
+    text-decoration-color: #000000 !important;
 }
 
 .result-content {
@@ -655,17 +720,19 @@ if r:
 
     # Final report
     if "writer" in r:
+        report_html = html.escape(r["writer"]).replace("\n", "<br>")
 
-        st.markdown("""
-        <div class="report-panel">
-            <div class="panel-label orange">
-                📝 Final Research Report
+        st.markdown(
+            f'''
+            <div class="report-panel">
+                <div class="panel-label orange">
+                    📝 Final Research Report
+                </div>
+                <div class="report-body">{report_html}</div>
             </div>
-        """, unsafe_allow_html=True)
-
-        st.markdown(r["writer"])
-
-        st.markdown("</div>", unsafe_allow_html=True)
+            ''',
+            unsafe_allow_html=True
+        )
 
         # Download button
         st.download_button(
@@ -677,17 +744,19 @@ if r:
 
     # Critic feedback
     if "critic" in r:
+        critic_html = html.escape(r["critic"]).replace("\n", "<br>")
 
-        st.markdown("""
-        <div class="feedback-panel">
-            <div class="panel-label green">
-                🧐 Critic Feedback
+        st.markdown(
+            f'''
+            <div class="feedback-panel">
+                <div class="panel-label green">
+                    🧐 Critic Feedback
+                </div>
+                <div class="feedback-body">{critic_html}</div>
             </div>
-        """, unsafe_allow_html=True)
-
-        st.markdown(r["critic"])
-
-        st.markdown("</div>", unsafe_allow_html=True)
+            ''',
+            unsafe_allow_html=True
+        )
 
 
 # ── Footer ────────────────────────────────────────────────────────────────────
